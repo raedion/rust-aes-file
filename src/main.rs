@@ -6,7 +6,7 @@ use std::fs::File;
 const FILE_SIZE: usize = 1024;
 
 fn main() {
-    encrypt("src.txt", "dst.txt", "pass");
+    encrypt("Target/src.txt", "Target/dst.txt", "pass");
 }
 
 /// 暗号化<br>
