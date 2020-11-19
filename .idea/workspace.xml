@@ -4,7 +4,19 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5b6b400f-e56c-4d34-99dd-5b11caa0a02c" name="Default Changelist" comment="" />
+    <list default="true" id="5b6b400f-e56c-4d34-99dd-5b11caa0a02c" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/rust-aes-file.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Target.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -25,6 +37,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="org.rust.cargo.project.model.PROJECT_DISCOVERY" value="true" />
+    <property name="settings.editor.selected.configurable" value="inlay.hints.Rust" />
   </component>
   <component name="RunManager">
     <configuration name="Run rust-aes-file" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
@@ -93,5 +106,9 @@
     <state width="618" height="263" key="GridCell.Tab.0.right/-1600.0.1600.1160/0.0.1280.984@0.0.1280.984" timestamp="1605693303309" />
     <state width="618" height="189" key="GridCell.Tab.0.right/0.0.1280.760@0.0.1280.760" timestamp="1605714833717" />
     <state width="817" height="270" key="GridCell.Tab.0.right/0.0.1680.1010/1680.0.1280.984@0.0.1680.1010" timestamp="1605793024035" />
+    <state x="1852" y="214" key="SettingsEditor" timestamp="1605795171785">
+      <screen x="1680" y="0" width="1280" height="984" />
+    </state>
+    <state x="1852" y="214" key="SettingsEditor/0.0.1680.1010/1680.0.1280.984@0.0.1680.1010" timestamp="1605795171785" />
   </component>
 </project>
