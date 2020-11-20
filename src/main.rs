@@ -1,58 +1,40 @@
-extern crate crypto;
-extern crate aesstream;
-
-use std::io::{BufReader, Read, BufWriter, Write};
-use aesstream::{AesWriter, AesReader};
-use crypto::aessafe::{AesSafe128Encryptor, AesSafe128Decryptor};
-use std::fs::File;
-
-const FILE_SIZE: usize = 1024;
+mod encryptor;      // 実行関数を含むモジュールを呼び出す
 
 fn main() {
-    encrypt("Target/src.txt", "Target/dst.txt", "pass");
-    decrypt("Target/dst.txt", "Target/src_.txt", "pass");
-}
+    let mut select_command_str = String::new();                                 // 入力コマンド
+    println!("Please select operation(0: encrypt, 1: decrypt)");                
+    std::io::stdin().read_line(&mut select_command_str).unwrap();               // 入力された値を取得
+    let select_command = match select_command_str.trim_end().parse::<u32>() {   // 入力された値を数字に変換
+        Ok(value) => {value}                                                    // 数字なら問題ない
+        Err(_) => {                                                             // 数字でないなら終了
+            println!("Please input number!");
+            return;
+        }
+    };
 
-/// 暗号化<br>
-/// 第1引数には読み込み元のファイル<br>
-/// 第2引数には書き込み先のファイル<br>
-/// 第3引数にはパスワード
-fn encrypt(src: &str, dst: &str, pass: &str) {
-    let src_file = File::open(src).unwrap();                // ファイルを開く
-    let mut reader = BufReader::new(&src_file);             // 読み込み用の機能を呼び出し
-    let mut block: [u8; FILE_SIZE] = [0u8; FILE_SIZE];      // 空のバイト配列を用意
-    reader.read(&mut block);                                // バイト配列にファイル情報を読み出し
+    println!("Please select input file");
+    let mut input_file_path = String::new();
+    std::io::stdin().read_line(&mut input_file_path).unwrap();
+    input_file_path = input_file_path.trim().parse().unwrap();                  // 読み込みファイルの指定
 
-    let key = pass.as_bytes();                              // 引数をバイト変換
-    let mut key_array = [0u8; 16];                          // バイト用配列
-    for i in 0..key.len() {                                 
-        key_array[i] = key[i];                              // スライスから配列へ変換
+    println!("Please select output file");
+    let mut output_file_path = String::new();
+    std::io::stdin().read_line(&mut output_file_path).unwrap();
+    output_file_path = output_file_path.trim().parse().unwrap();                // 書き込みファイルの指定
+
+    println!("Please input password");
+    let mut password = String::new();
+    std::io::stdin().read_line(&mut password).unwrap();
+    password = password.trim().parse().unwrap();                                // パスワードの指定
+
+    if select_command == 0 {
+        encryptor::encrypt(&*input_file_path, &*output_file_path, &*password);  // 暗号化の実行
+        return;
     }
-
-    let dst_file = File::create(dst).unwrap();                      // 出力先ファイルを指定
-    let encryptor = AesSafe128Encryptor::new(&key_array);           // 暗号化の呼び出し
-    let mut writer = AesWriter::new(dst_file, encryptor).unwrap();  // ファイルへの暗号書き出しの呼び出し
-    writer.write_all(&block);                                       // 実行
-}
-
-/// 復号化<br>
-/// 第1引数には読み込み元のファイル<br>
-/// 第2引数には書き込み先のファイル<br>
-/// 第3引数にはパスワード
-fn decrypt(dst: &str, src: &str, pass: &str) {
-    let key = pass.as_bytes();                              // 引数をバイト変換
-    let mut key_array = [0u8; 16];                          // バイト用配列
-    for i in 0..key.len() {                                 
-        key_array[i] = key[i];                              // スライスから配列へ変換
+    else if select_command == 1 {
+        encryptor::decrypt(&*input_file_path, &*output_file_path, &*password);  // 復号化の実行
+        return;
     }
-
-    let src_file = File::open(dst).unwrap();                        // ファイルを開く
-    let decryptor = AesSafe128Decryptor::new(&key_array);
-    let mut reader = AesReader::new(&src_file, decryptor).unwrap(); // 読み込み用の機能を呼び出し
-    let mut block: [u8; FILE_SIZE] = [0u8; FILE_SIZE];              // 空のバイト配列を用意
-    reader.read(&mut block);                                        // バイト配列にファイル情報を読み出し
-
-    let dst_file = File::create(src).unwrap();              // 出力先ファイルを指定
-    let mut writer = BufWriter::new(&dst_file);             // 書き込み用の機能を呼び出し
-    writer.write(&block);                                   // 書き込みを実行
+    println!("Don't nothing");                                                  // 該当しない操作であったら何もしない
 }
+
