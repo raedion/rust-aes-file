@@ -1,40 +1,50 @@
-mod encryptor;      // 実行関数を含むモジュールを呼び出す
+use std::io::stdin;
+
+mod encryptor;
 
 fn main() {
-    let mut select_command_str = String::new();                                 // 入力コマンド
-    println!("Please select operation(0: encrypt, 1: decrypt)");                
-    std::io::stdin().read_line(&mut select_command_str).unwrap();               // 入力された値を取得
-    let select_command = match select_command_str.trim_end().parse::<u32>() {   // 入力された値を数字に変換
+    println!("Please select operation(0: encrypt, 1: decrypt)");
+    let select_command = match input_read().parse::<u8>() {   // 入力された値を数字に変換
         Ok(value) => {value}                                                    // 数字なら問題ない
         Err(_) => {                                                             // 数字でないなら終了
-            println!("Please input number!");
+            println!("Please input valid number!");
             return;
         }
     };
 
     println!("Please select input file");
-    let mut input_file_path = String::new();
-    std::io::stdin().read_line(&mut input_file_path).unwrap();
-    input_file_path = input_file_path.trim().parse().unwrap();                  // 読み込みファイルの指定
+    let input_file_path = input_read();                  // 読み込みファイルの指定
 
     println!("Please select output file");
-    let mut output_file_path = String::new();
-    std::io::stdin().read_line(&mut output_file_path).unwrap();
-    output_file_path = output_file_path.trim().parse().unwrap();                // 書き込みファイルの指定
+    let output_file_path = input_read();                // 書き込みファイルの指定
 
     println!("Please input password");
-    let mut password = String::new();
-    std::io::stdin().read_line(&mut password).unwrap();
-    password = password.trim().parse().unwrap();                                // パスワードの指定
+    let password = input_read();                                // パスワードの指定
 
     if select_command == 0 {
-        encryptor::encrypt(&*input_file_path, &*output_file_path, &*password);  // 暗号化の実行
+        let enc_result = encryptor::encrypt(&*input_file_path, &*output_file_path, &*password);
+        if let Ok(_) = enc_result {
+            println!("Encrypt Finished!");
+        }  // 復号化の実行
+        else {
+            println!("{}", enc_result.err().unwrap());
+        }
         return;
     }
     else if select_command == 1 {
-        encryptor::decrypt(&*input_file_path, &*output_file_path, &*password);  // 復号化の実行
+        let dec_result = encryptor::decrypt(&*input_file_path, &*output_file_path, &*password);
+        if let Ok(_) = dec_result {
+            println!("Decrypt succeeded!");
+        }  // 復号化の実行
+        else {
+            println!("{}", dec_result.err().unwrap());
+        }
         return;
     }
     println!("Don't nothing");                                                  // 該当しない操作であったら何もしない
 }
-
+fn input_read() -> String {
+    let mut input_read = String::new();
+    stdin().read_line(&mut input_read).unwrap();
+    input_read.trim().parse().unwrap()
+}
