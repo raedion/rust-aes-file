@@ -3,10 +3,11 @@ extern crate aesstream;
 
 use std::io::{BufReader, Read, BufWriter, Write};
 use aesstream::{AesWriter, AesReader};
-use crypto::aessafe::{AesSafe128Encryptor, AesSafe128Decryptor};
+use crypto::aessafe::{AesSafe256Encryptor, AesSafe256Decryptor};
 use std::fs::File;
 
 const FILE_SIZE: usize = 1024;
+const PASSWORD_SIZE: usize = 32;        // パスワードのバイトサイズ. aessafeパッケージのサイズ(128, 192, 256)に応じて変化させる必要がある
 
 /// 暗号化<br>
 /// 第1引数には読み込み元のファイル<br>
@@ -19,13 +20,14 @@ pub fn encrypt(src: &str, dst: &str, pass: &str) {
     reader.read(&mut block);                                // バイト配列にファイル情報を読み出し
 
     let key = pass.as_bytes();                              // 引数をバイト変換
-    let mut key_array = [0u8; 16];                          // バイト用配列
+    println!("{}", key.len());
+    let mut key_array = [0u8; PASSWORD_SIZE];                          // バイト用配列
     for i in 0..key.len() {
         key_array[i] = key[i];                              // スライスから配列へ変換
     }
 
     let dst_file = File::create(dst).unwrap();                      // 出力先ファイルを指定
-    let encryptor = AesSafe128Encryptor::new(&key_array);           // 暗号化の呼び出し
+    let encryptor = AesSafe256Encryptor::new(&key_array);           // 暗号化の呼び出し
     let mut writer = AesWriter::new(dst_file, encryptor).unwrap();  // ファイルへの暗号書き出しの呼び出し
     writer.write_all(&block);                                       // 実行
 }
@@ -36,13 +38,13 @@ pub fn encrypt(src: &str, dst: &str, pass: &str) {
 /// 第3引数にはパスワード
 pub fn decrypt(dst: &str, src: &str, pass: &str) {
     let key = pass.as_bytes();                              // 引数をバイト変換
-    let mut key_array = [0u8; 16];                          // バイト用配列
+    let mut key_array = [0u8; PASSWORD_SIZE];                          // バイト用配列
     for i in 0..key.len() {
         key_array[i] = key[i];                              // スライスから配列へ変換
     }
 
     let src_file = File::open(dst).unwrap();                        // ファイルを開く
-    let decryptor = AesSafe128Decryptor::new(&key_array);
+    let decryptor = AesSafe256Decryptor::new(&key_array);
     let mut reader = AesReader::new(&src_file, decryptor).unwrap(); // 読み込み用の機能を呼び出し
     let mut block: [u8; FILE_SIZE] = [0u8; FILE_SIZE];              // 空のバイト配列を用意
     reader.read(&mut block);                                        // バイト配列にファイル情報を読み出し
