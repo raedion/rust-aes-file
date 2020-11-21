@@ -21,27 +21,24 @@ fn main() {
     println!("Please input password");
     let password = input_read();                                // パスワードの指定
 
-    if select_command == 0 {
-        let enc_result = encryptor::encrypt(&*input_file_path, &*output_file_path, &*password);
-        if let Ok(_) = enc_result {
-            println!("Encrypt Finished!");
-        }  // 復号化の実行
-        else {
-            println!("{}", enc_result.err().unwrap());
+    exec_result = {
+        if select_command == 0 {
+            encryptor::encrypt(&*input_file_path, &*output_file_path, &*password)
         }
-        return;
-    }
-    else if select_command == 1 {
-        let dec_result = encryptor::decrypt(&*input_file_path, &*output_file_path, &*password);
-        if let Ok(_) = dec_result {
-            println!("Decrypt succeeded!");
-        }  // 復号化の実行
-        else {
-            println!("{}", dec_result.err().unwrap());
+        else if select_command == 1 {
+            encryptor::decrypt(&*input_file_path, &*output_file_path, &*password)
         }
-        return;
+        else {
+            println!("Don't nothing");                                                  // 該当しない操作であったら何もしない
+            return;
+        }
+    };
+    if let Ok(_) = exec_result {
+        println!("Operation Finished!");
     }
-    println!("Don't nothing");                                                  // 該当しない操作であったら何もしない
+    else {
+        println!("{}", exec_result.err().unwrap());
+    }
 }
 fn input_read() -> String {
     let mut input_read = String::new();
