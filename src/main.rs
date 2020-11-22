@@ -1,5 +1,3 @@
-use std::io::stdin;
-
 mod encryptor;
 /// メイン関数<br>
 /// ユーザー側はここから処理をする
@@ -16,17 +14,17 @@ fn main() {
         if select_command == 0 {                                // 暗号化を実行
             encryptor::encrypt(
                 {
-                   println!("Please select encrypting file");   // 暗号化したいファイルを選択
-                   &*(input_read())
-               },
-               {
-                   println!("Please name encrypted file");      // 暗号化されたファイルの出力先を指定
-                   &*(input_read())
-               },
-               {
-                   println!("Please input password");           // パスワードの入力
-                   &*(input_read())
-               }
+                    println!("Please select encrypting file");   // 暗号化したいファイルを選択
+                    &*(input_read())
+                },
+                {
+                    println!("Please name encrypted file");      // 暗号化されたファイルの出力先を指定
+                    &*(input_read())
+                },
+                {
+                    println!("Please input password");           // パスワードの入力
+                    &*(input_read())
+                }
             )
         }
         else if select_command == 1 {                           // 復号化を実行
@@ -61,6 +59,6 @@ fn main() {
 /// 戻り値は入力された文字列のString型
 fn input_read() -> String {
     let mut input_read = String::new();
-    stdin().read_line(&mut input_read).unwrap();
+    std::io::stdin().read_line(&mut input_read).unwrap();
     input_read.trim().parse().unwrap()
 }
