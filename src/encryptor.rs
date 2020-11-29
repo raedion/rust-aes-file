@@ -34,7 +34,6 @@ pub fn encrypt(src: &str, dst: &str, pass: &str) -> Result<()>{
     let encryptor = AesSafe256Encryptor::new(&key_array);   // 暗号化の呼び出し
     let mut writer = AesWriter::new(dst_file, encryptor)?;  // ファイルへの暗号書き出しの呼び出し
     writer.write_all(&block)?;                              // 実行
-    print!("");
     Ok(())
 }
 
